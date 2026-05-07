@@ -587,3 +587,471 @@ textarea.fc{resize:vertical;min-height:96px;}
 [data-role="admin"] .atasan-only {
   display: none !important;
 }
+
+/* ================== DARK MODE RINGAN ================== */
+
+/* Toggle Style */
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 48px;
+    height: 24px;
+}
+.switch input { opacity: 0; width: 0; height: 0; }
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background-color: #ccc;
+    transition: .4s;
+    border-radius: 24px;
+}
+.slider.round:before {
+    border-radius: 50%;
+}
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 18px;
+    width: 18px;
+    left: 3px;
+    bottom: 3px;
+    background-color: white;
+    transition: .4s;
+}
+input:checked + .slider { background-color: #3b82f6; }
+input:checked + .slider:before { transform: translateX(24px); }
+
+/* Dark Mode */
+.dark {
+    --bg-main: #0f172a;
+    --bg-card: #1e2937;
+    --text: #e2e8f0;
+    --text-muted: #94a3b8;
+    --border: #334155;
+    --input-bg: #334155;
+}
+
+.dark body,
+.dark #wrap,
+.dark .main,
+.dark .content {
+    background-color: var(--bg-main) !important;
+    color: var(--text);
+}body.dark {
+    background-color: #0f172a;
+    color: #e2e8f0;
+}
+
+body.dark #wrap,
+body.dark .main,
+body.dark .content {
+    background-color: #0f172a;
+}
+
+body.dark .card,
+.dark .wb,
+.dark .stat-card,
+.dark .modal,
+.dark .sh,
+.dark .topbar {
+    background-color: var(--bg-card) !important;
+    border-color: var(--border) !important;
+    color: var(--text);
+}
+
+.dark .fc,
+.dark input,
+.dark select,
+.dark textarea,
+.dark .fi-wrap {
+    background-color: var(--input-bg) !important;
+    color: var(--text) !important;
+    border-color: var(--border) !important;
+}
+
+.dark .fl,
+.dark .set-lbl,
+.dark .card-t,
+.dark .sh-t,
+.dark .st-l,
+.dark .set-item {
+    color: var(--text) !important;
+}
+
+.dark .sh-s,
+.dark .set-desc,
+.dark .st-v {
+    color: var(--text-muted) !important;
+}
+
+.dark table th,
+.dark table td {
+    color: var(--text) !important;
+    border-color: var(--border) !important;
+}
+
+.dark .sidebar {
+    background-color: #1e2937 !important;
+}
+
+/* FIX VISUAL NOTIFIKASI */
+#p-pengaturan .card-body{
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+#p-pengaturan .set-item{
+  padding: 10px 0;
+}
+
+/* ===== FIX FINAL SETTINGS ===== */
+.settings-grid{
+  display: flex !important;
+  gap: 16px;
+  align-items: flex-start !important;
+}
+
+.settings-grid > .card{
+  width: 50%;
+}
+
+/* ===== FIX FINAL YANG PASTI BERHASIL ===== */
+#p-pengaturan .settings-grid {
+  align-items: flex-start !important;
+}
+
+#p-pengaturan .settings-grid > .card {
+  height: auto !important;
+  max-height: max-content !important;
+}
+
+/* Samakan ukuran toggle Mode Gelap dengan toggle lain */
+.switch {
+  width: 40px;
+  height: 22px;
+}
+
+.slider {
+  border-radius: 11px;
+}
+
+.slider:before {
+  width: 16px;
+  height: 16px;
+  left: 3px;
+  bottom: 3px;
+}
+
+input:checked + .slider:before {
+  transform: translateX(18px);
+}
+
+/* DARK MODE GLOBAL */
+body.dark {
+    background: #0f172a;
+    color: #e5e7eb;
+}
+
+/* CARD */
+body.dark .card {
+    background: #1e293b;
+    color: #e5e7eb;
+}
+
+/* TABLE */
+body.dark table {
+    background: transparent;
+    color: #e5e7eb;
+}
+
+body.dark thead {
+    background: #334155;
+}
+
+body.dark tbody tr {
+    border-bottom: 1px solid #374151;
+}
+
+body.dark .card-body {
+    background: #1e293b;
+}
+
+/* INPUT */
+body.dark .fc {
+    background: #1e293b;
+    color: white;
+    border: 1px solid #374151;
+}
+
+/* HEADER / TITLE */
+body.dark .card-t,
+body.dark .sh-t {
+    color: white;
+}
+
+/* SUBTEXT */
+body.dark .sh-s {
+    color: #9ca3af;
+}
+
+/* ================= FORCE DARK MODE FIX (PALING AMAN) ================= */
+
+/* GLOBAL */
+body.dark {
+  background: #0f172a !important;
+  color: #e5e7eb !important;
+}
+
+/* WRAPPER */
+body.dark #wrap,
+body.dark .main,
+body.dark .content {
+  background: #0f172a !important;
+}
+
+/* SIDEBAR */
+body.dark .sidebar {
+  background: #1e293b !important;
+}
+
+/* TOPBAR */
+body.dark .topbar {
+  background: #1e293b !important;
+  border-bottom: 1px solid #334155 !important;
+}
+
+/* CARD */
+body.dark .card,
+body.dark .modal,
+body.dark .stat-card {
+  background: #1e293b !important;
+  color: #e5e7eb !important;
+  border-color: #334155 !important;
+}
+
+/* 🔥 FIX HEADER (Pengaturan hilang) */
+body.dark .sh-t,
+body.dark .card-t,
+body.dark .topbar-title {
+  color: #ffffff !important;
+}
+
+/* TEXT */
+body.dark .sh-s,
+body.dark .set-desc,
+body.dark .st-l {
+  color: #94a3b8 !important;
+}
+
+/* INPUT */
+body.dark .fc,
+body.dark input,
+body.dark select,
+body.dark textarea {
+  background: #0f172a !important;
+  color: #e5e7eb !important;
+  border: 1px solid #334155 !important;
+}
+
+/* ================= TABLE FIX TOTAL ================= */
+
+body.dark table {
+  background: transparent !important;
+}
+
+body.dark thead th {
+  background: #334155 !important;
+  color: #e5e7eb !important;
+  border-color: #475569 !important;
+}
+
+body.dark tbody td {
+  color: #e5e7eb !important;
+  border-bottom: 1px solid #374151 !important;
+}
+
+body.dark tbody tr {
+  background: transparent !important;
+}
+
+body.dark tbody tr:hover {
+  background: #1e293b !important;
+}
+
+/* ================= STATUS ================= */
+
+body.dark .t-pend {
+  background: #78350f !important;
+  color: #fcd34d !important;
+}
+
+body.dark .t-appr {
+  background: #064e3b !important;
+  color: #6ee7b7 !important;
+}
+
+body.dark .t-rej {
+  background: #7f1d1d !important;
+  color: #fca5a5 !important;
+}
+
+/* ================= MODAL ================= */
+
+body.dark .ov {
+  background: rgba(0, 0, 0, 0.6) !important;
+}
+
+/* ================= FINAL FIX DARK MODE (STABIL) ================= */
+
+/* TEXT GLOBAL */
+body.dark {
+  background: #0f172a !important;
+  color: #e5e7eb !important;
+}
+
+/* HEADER (PENGATURAN AGAR TERLIHAT) */
+body.dark .topbar-title,
+body.dark .sh-t,
+body.dark .card-t {
+  color: #ffffff !important;
+}
+
+/* CARD */
+body.dark .card,
+body.dark .modal,
+body.dark .stat-card {
+  background: #1e293b !important;
+  border-color: #334155 !important;
+}
+
+/* TABLE (INI YANG PALING PENTING) */
+body.dark table {
+  background: transparent !important;
+}
+
+body.dark thead th {
+  background: #334155 !important;
+  color: #e5e7eb !important;
+}
+
+body.dark tbody td {
+  color: #e5e7eb !important;
+  border-bottom: 1px solid #374151 !important;
+}
+
+body.dark tbody tr {
+  background: transparent !important;
+}
+
+body.dark tbody tr:hover {
+  background: #1e293b !important;
+}
+
+/* ================= FIX TEXT DETAIL REQUEST ================= */
+
+body.dark .dl {
+  color: #94a3b8 !important;
+}
+
+body.dark .dv {
+  color: #e5e7eb !important;
+}
+
+body.dark .dr {
+  color: #e5e7eb !important;
+}
+
+/* deskripsi */
+body.dark .card-body p,
+body.dark .card-body span {
+  color: #e5e7eb !important;
+}
+
+/* ================= FIX FINAL TEXT DARK MODE ================= */
+
+body.dark .card,
+body.dark .card * {
+  color: #e5e7eb;
+}
+
+body.dark .dl {
+  color: #94a3b8;
+}
+
+body.dark .dv {
+  color: #ffffff;
+}
+
+body.dark .card-t,
+body.dark .sh-t,
+body.dark .topbar-title {
+  color: #ffffff;
+}
+
+/* ================= FIX BUTTON DARK MODE ================= */
+
+body.dark .btn {
+  color: #ffffff !important;
+}
+
+body.dark .btn-outline {
+  color: #60a5fa !important;
+  border-color: #60a5fa !important;
+  background: transparent !important;
+}
+
+body.dark .btn-outline:hover {
+  background: #1e3a8a !important;
+  color: #ffffff !important;
+}
+
+body.dark .btn-primary {
+  background: #2563eb !important;
+  color: #ffffff !important;
+}
+
+body.dark .btn-ghost {
+  background: #334155 !important;
+  color: #e5e7eb !important;
+}
+
+/* ================= FIX TABS DARK MODE ================= */
+
+body.dark .tabs {
+  background: #1e293b !important;
+}
+
+body.dark .tab {
+  color: #94a3b8 !important;
+}
+
+body.dark .tab:hover {
+  color: #e5e7eb !important;
+}
+
+body.dark .tab.act {
+  background: #0f172a !important;
+  color: #60a5fa !important;
+  box-shadow: none !important;
+}
+
+/* Badge angka di tab */
+body.dark .tab.act .tb {
+  background: #2563eb !important;
+  color: #fff !important;
+}
+
+body.dark .tab:not(.act) .tb {
+  background: #334155 !important;
+  color: #cbd5f5 !important;
+}
+
+#darkToggle{
+  margin-left: auto;
+}
+
+.set-item{
+  align-items: center;
+}
