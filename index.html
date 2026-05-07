@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Request & Approval System</title>
+<link rel="stylesheet" href="css/styles.css">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+<div id="wrap">
+<!-- SIDEBAR -->
+<aside class="sidebar">
+  <div class="sb-brand">
+    <div class="ic">📋</div>
+    <div class="tx">Request System<small>Sistem Permintaan</small></div>
+  </div>
+  <nav class="sb-nav" id="sbNav"></nav>
+</aside>
+
+<!-- MAIN -->
+<div class="main">
+  <!-- TOPBAR -->
+  <div class="topbar">
+    <div class="topbar-title" id="tbTitle">Dashboard</div>
+    <div class="role-sw">
+      <select id="roleSelect" onchange="switchRole(this.value)">
+        <option value="karyawan">👤 Asna (Karyawan)</option>
+        <option value="atasan">👔 Rudi (Atasan)</option>
+        <option value="admin">🛡️ Admin</option>
+      </select>
+    </div>
+    <button class="notif-btn" onclick="nav('notifikasi')" title="Notifikasi">🔔<span class="ndot" id="topNotifDot"></span></button>
+    <div class="av av-blue" id="topAv">A</div>
+  </div>
+
+  <!-- CONTENT -->
+  <div class="content">
+
+    <!-- 1. DASHBOARD -->
+    <div class="page on" id="p-dashboard">
+      <div class="wb">
+        <div class="wb-text">
+          <div class="wg" id="wgText">Selamat datang, Asna! 👋</div>
+          <div class="ws">Berikut ringkasan request Anda.</div>
+        </div>
+        <div class="wb-ic">📊</div>
+      </div>
+      <div class="stat-row">
+        <div class="stat-card"><div class="st-ic ic-b">📋</div><div><div class="st-v" id="stTotal">0</div><div class="st-l">Total Request</div></div></div>
+        <div class="stat-card"><div class="st-ic ic-y">⏳</div><div><div class="st-v" id="stPend">0</div><div class="st-l">Pending</div></div></div>
+        <div class="stat-card"><div class="st-ic ic-g">✅</div><div><div class="st-v" id="stAppr">0</div><div class="st-l">Disetujui</div></div></div>
+        <div class="stat-card"><div class="st-ic ic-r">❌</div><div><div class="st-v" id="stRej">0</div><div class="st-l">Ditolak</div></div></div>
+      </div>
+      <div class="card">
+        <div class="card-head">
+          <div class="card-t">Request Terbaru</div>
+          <span class="lk" onclick="nav('list-request')">Lihat semua →</span>
+        </div>
+        <div class="card-body" style="padding-top:10px">
+          <table>
+            <thead><tr><th>No</th><th>Jenis Request</th><th>Tanggal</th><th>Status</th><th>Aksi</th></tr></thead>
+            <tbody id="dashTb"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2. FORM AJUKAN REQUEST -->
+    <div class="page" id="p-ajukan">
+      <div class="sh">
+        <div>
+          <div class="sh-t">Ajukan Request Baru</div>
+          <div class="sh-s">Silakan lengkapi form di bawah ini untuk mengajukan request.</div>
+        </div>
+      </div>
+      <div class="card" style="max-width:620px">
+        <div class="card-body">
+          <div id="ajAlert"></div>
+          <div class="fg">
+            <label class="fl">Jenis Request <span style="color:#ef4444">*</span></label>
+            <select class="fc" id="ajJenis">
+              <option value="">-- Pilih Jenis Request --</option>
+              <option>Izin Kerja</option>
+              <option>Lembur</option>
+              <option>Permintaan Alat Kerja</option>
+              <option>Reimbursement</option>
+              <option>Cuti Tahunan</option>
+              <option>Cuti Sakit</option>
+              <option>Perjalanan Dinas</option>
+            </select>
+          </div>
+          <div class="fg">
+            <label class="fl">Tanggal <span style="color:#ef4444">*</span></label>
+            <input type="date" class="fc" id="ajTgl" value="2026-05-12">
+          </div>
+          <div class="fg">
+            <label class="fl">Deskripsi <span style="color:#ef4444">*</span></label>
+            <textarea class="fc" id="ajDesc" placeholder="Saya izin tidak masuk kerja karena ada keperluan keluarga."></textarea>
+          </div>
+          <div class="fg">
+            <label class="fl">Lampiran (opsional)</label>
+            <div class="fi-wrap" onclick="document.getElementById('ajFile').click()">
+              <input type="file" id="ajFile" onchange="handleFile(this,'ajFileLbl')">
+              <div id="ajFileLbl" class="fi-lbl">📎 Choose File &nbsp; Tidak ada file chosen</div>
+            </div>
+          </div>
+          <div style="display:flex;gap:8px;justify-content:flex-end">
+            <button class="btn btn-ghost" onclick="resetAjukan()">Batal</button>
+            <button class="btn btn-primary btn-lg" onclick="submitRequest()">Kirim Request</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3. LIST REQUEST MASUK (ATASAN) -->
+    <div class="page" id="p-request-masuk">
+      <div class="sh">
+        <div>
+          <div class="sh-t" id="rmTitle">Request Masuk</div>
+          <div class="sh-s">Berikut adalah daftar request yang memerlukan persetujuan Anda.</div>
+        </div>
+      </div>
+      <div class="tabs" id="rmTabs">
+        <div class="tab act" onclick="filterRM('all',this)">Semua <span class="tb" id="rmTabAll">0</span></div>
+        <div class="tab" onclick="filterRM('Pending',this)">Pending <span class="tb" id="rmTabPend">0</span></div>
+        <div class="tab" onclick="filterRM('Disetujui',this)">Disetujui <span class="tb" id="rmTabAppr">0</span></div>
+        <div class="tab" onclick="filterRM('Ditolak',this)">Ditolak <span class="tb" id="rmTabRej">0</span></div>
+      </div>
+      <div class="card">
+        <div class="card-body" style="padding:0">
+          <table>
+            <thead><tr><th>No</th><th>Nama</th><th>Jenis Request</th><th>Tanggal</th><th>Status</th><th>Aksi</th></tr></thead>
+            <tbody id="rmTb"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- 4. DETAIL & APPROVAL -->
+    <div class="page" id="p-detail">
+      <div class="sh">
+        <div>
+          <div class="sh-t">Detail Request</div>
+        </div>
+        <button class="btn btn-ghost btn-sm" onclick="goBack()">← Kembali</button>
+      </div>
+      <div class="detail-grid">
+        <div class="card">
+          <div class="card-head"><div class="card-t">Informasi Request</div></div>
+          <div class="card-body" id="detailInfo"></div>
+        </div>
+        <div class="card" id="detailAction">
+          <div class="card-head"><div class="card-t">Tindakan</div></div>
+          <div class="card-body" id="detailActionBody"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 5. RIWAYAT & STATUS -->
+    <div class="page" id="p-riwayat">
+      <div class="sh">
+        <div>
+          <div class="sh-t">Riwayat Request</div>
+          <div class="sh-s">Berikut adalah riwayat semua request yang pernah Anda ajukan.</div>
+        </div>
+      </div>
+      <div class="fr">
+        <select id="riwJenis" onchange="renderRiwayat()"><option value="">Semua</option><option>Izin Kerja</option><option>Lembur</option><option>Permintaan Alat Kerja</option><option>Reimbursement</option><option>Cuti Tahunan</option></select>
+        <select id="riwStatus" onchange="renderRiwayat()"><option value="">Semua</option><option>Pending</option><option>Disetujui</option><option>Ditolak</option></select>
+        <input type="date" id="riwFrom" placeholder="dd/mm/yyyy" onchange="renderRiwayat()">
+        <input type="date" id="riwTo" placeholder="dd/mm/yyyy" onchange="renderRiwayat()">
+        <button class="btn btn-primary btn-sm" onclick="renderRiwayat()">Filter</button>
+      </div>
+      <div class="card">
+        <div class="card-body" style="padding:0">
+          <table>
+            <thead><tr><th>No</th><th>Jenis Request</th><th>Tanggal</th><th>Status</th><th>Catatan</th><th>Aksi</th></tr></thead>
+            <tbody id="riwTb"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- 6. KPI - DAFTAR KARYAWAN (ATASAN) -->
+    <div class="page" id="p-kpi">
+      <div class="sh">
+        <div>
+          <div class="sh-t">Penilaian KPI Karyawan</div>
+          <div class="sh-s">Berikut adalah daftar karyawan yang perlu dinilai performanya.</div>
+        </div>
+      </div>
+      <div class="fr">
+        <select id="kpiDept" onchange="renderKPI()"><option value="">Semua Departemen</option><option>HRD</option><option>IT</option><option>Finance</option><option>Marketing</option><option>Ops</option></select>
+        <div class="srch"><input type="text" id="kpiSearch" placeholder="Cari karyawan..." oninput="renderKPI()"></div>
+      </div>
+      <div class="card">
+        <div class="card-body" style="padding:0">
+          <table>
+            <thead><tr><th>No</th><th>Nama</th><th>Departemen</th><th>Periode</th><th>Status Penilaian</th><th>Total Score</th><th>Aksi</th></tr></thead>
+            <tbody id="kpiTb"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- 7. FORM PENILAIAN KPI (ATASAN) -->
+    <div class="page" id="p-kpi-form">
+      <div class="sh">
+        <div>
+          <div class="sh-t">Form Penilaian KPI</div>
+          <div class="sh-s">Silakan berikan penilaian untuk setiap indikator performa.</div>
+        </div>
+        <button class="btn btn-ghost btn-sm" onclick="nav('kpi')">← Kembali</button>
+      </div>
+      <div class="detail-grid">
+        <div class="card">
+          <div class="card-head"><div class="card-t">Informasi Karyawan</div></div>
+          <div class="card-body" id="kpiFormInfo"></div>
+        </div>
+        <div class="card">
+          <div class="card-head"><div class="card-t">Indikator Penilaian</div></div>
+          <div class="card-body" id="kpiFormBody"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 8. DETAIL HASIL KPI (KARYAWAN/ATASAN) -->
+    <div class="page" id="p-kpi-detail">
+      <div class="sh">
+        <div>
+          <div class="sh-t">Detail Hasil Penilaian KPI</div>
+        </div>
+        <button class="btn btn-ghost btn-sm" onclick="goBack()">← Kembali</button>
+      </div>
+      <div class="detail-grid">
+        <div class="card">
+          <div class="card-head"><div class="card-t">Informasi Penilaian</div></div>
+          <div class="card-body" id="kpiDetailInfo"></div>
+        </div>
+        <div class="card">
+          <div class="card-head"><div class="card-t">Ringkasan Score</div></div>
+          <div class="card-body" id="kpiDetailSummary"></div>
+        </div>
+      </div>
+      <div class="card" style="margin-top:16px">
+        <div class="card-head"><div class="card-t">Detail Penilaian per Indikator</div></div>
+        <div class="card-body" id="kpiDetailBody"></div>
+      </div>
+    </div>
+
+    <!-- 9. RIWAYAT PENILAIAN KPI -->
+    <div class="page" id="p-kpi-riwayat">
+      <div class="sh">
+        <div>
+          <div class="sh-t">Riwayat Penilaian KPI</div>
+          <div class="sh-s">Berikut adalah riwayat penilaian KPI yang telah dilakukan.</div>
+        </div>
+      </div>
+      <div class="fr">
+        <select id="kpiRPeriod" onchange="renderKPIRiwayat()"><option value="">Semua Periode</option><option>Q1 2026</option><option>Q2 2026</option><option>Q3 2026</option><option>Q4 2026</option></select>
+        <select id="kpiRStatus" onchange="renderKPIRiwayat()"><option value="">Semua Status</option><option>Sudah Dinilai</option><option>Belum Dinilai</option></select>
+      </div>
+      <div class="card">
+        <div class="card-body" style="padding:0">
+          <table>
+            <thead><tr><th>No</th><th>Nama Karyawan</th><th>Periode</th><th>Total Score</th><th>Kategori</th><th>Tanggal Dinilai</th><th>Aksi</th></tr></thead>
+            <tbody id="kpiRTb"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- NOTIFIKASI -->
+    <div class="page" id="p-notifikasi">
+      <div class="sh">
+        <div><div class="sh-t">Notifikasi</div><div class="sh-s">Update permintaan Anda.</div></div>
+        <button class="btn btn-ghost btn-sm" onclick="markAll()">✓ Tandai semua dibaca</button>
+      </div>
+      <div class="card"><div class="card-body" id="notifList"></div></div>
+    </div>
+
+    <!-- PENGATURAN -->
+    <div class="page" id="p-pengaturan">
+      <div class="sh"><div><div class="sh-t">Pengaturan</div><div class="sh-s">Kelola preferensi akun Anda.</div></div></div>
+      <div class="settings-grid">
+        <div class="card">
+          <div class="card-head"><div class="card-t">Profil Akun</div></div>
+          <div class="card-body">
+            <div class="fg"><label class="fl">Nama Lengkap</label><input class="fc" id="pNama" value="Asna"></div>
+            <div class="fg"><label class="fl">Email</label><input type="email" class="fc" value="asna@perusahaan.com"></div>
+            <div class="fg"><label class="fl">Departemen</label><input class="fc" value="Human Resources"></div>
+            <div class="fg"><label class="fl">Role</label><input class="fc" id="pRole" value="Karyawan" readonly style="background:#f9fafb"></div>
+            <button class="btn btn-primary" onclick="toast('✅ Profil disimpan')">💾 Simpan</button>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-head"><div class="card-t">Notifikasi</div></div>
+          <div class="card-body">
+            <div class="set-item"><div><div class="set-lbl">Email Notifikasi</div><div class="set-desc">Terima notifikasi via email</div></div><div class="tog on" id="t1" onclick="togSet('t1')"></div></div>
+            <div class="set-item"><div><div class="set-lbl">Push Notifikasi</div><div class="set-desc">Notifikasi browser</div></div><div class="tog on" id="t2" onclick="togSet('t2')"></div></div>
+            <div class="set-item"><div><div class="set-lbl">Laporan Mingguan</div><div class="set-desc">Ringkasan tiap Senin</div></div><div class="tog" id="t3" onclick="togSet('t3')"></div></div>
+            <div class="set-item"><div><div class="set-lbl">Mode Gelap</div><div class="set-desc">Tema antarmuka</div></div><div class="tog" id="t4" onclick="togSet('t4')"></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- KELOLA USER (ADMIN) -->
+    <div class="page" id="p-kelola-user">
+      <div class="sh">
+        <div><div class="sh-t">Kelola User</div><div class="sh-s">Manajemen akun karyawan.</div></div>
+        <button class="btn btn-primary" onclick="openModal('mAddUser')">+ Tambah User</button>
+      </div>
+      <div class="card">
+        <div class="card-body" style="padding:0">
+          <table>
+            <thead><tr><th>No</th><th>Nama</th><th>Email</th><th>Departemen</th><th>Role</th><th>Status</th><th>Aksi</th></tr></thead>
+            <tbody id="userTb"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- LIST REQUEST (general) -->
+    <div class="page" id="p-list-request">
+      <div class="sh">
+        <div><div class="sh-t">List Request</div><div class="sh-s" id="lrSub">Semua request Anda.</div></div>
+        <button class="btn btn-primary" id="btnBaru" onclick="nav('ajukan')">+ Ajukan Baru</button>
+      </div>
+      <div class="fr">
+        <select id="lrStatus" onchange="renderLR()"><option value="">Semua Status</option><option>Pending</option><option>Disetujui</option><option>Ditolak</option></select>
+        <select id="lrJenis" onchange="renderLR()"><option value="">Semua Jenis</option><option>Izin Kerja</option><option>Lembur</option><option>Permintaan Alat Kerja</option><option>Reimbursement</option><option>Cuti Tahunan</option></select>
+        <div class="srch"><input type="text" id="lrSearch" placeholder="Cari request..." oninput="renderLR()"></div>
+      </div>
+      <div class="tabs" id="lrTabs"></div>
+      <div class="card">
+        <div class="card-body" style="padding:0">
+          <table>
+            <thead><tr id="lrHead"></tr></thead>
+            <tbody id="lrTb"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /content -->
+</div><!-- /main -->
+
+</div><!-- /wrap -->
+
+<!-- MODAL: DETAIL -->
+<div class="ov" id="mDetail">
+  <div class="modal">
+    <div class="mh"><div class="mh-t">Detail Request</div><button class="mc-btn" onclick="closeModal('mDetail')">✕</button></div>
+    <div class="mb" id="mDetailBody"></div>
+    <div class="mf" id="mDetailFoot"></div>
+  </div>
+</div>
+
+<!-- MODAL: ACTION -->
+<div class="ov" id="mAction">
+  <div class="modal" style="max-width:420px">
+    <div class="mh"><div class="mh-t" id="mActTitle">Setujui Request</div><button class="mc-btn" onclick="closeModal('mAction')">✕</button></div>
+    <div class="mb">
+      <p id="mActDesc" style="font-size:12.5px;color:#6b7280;margin-bottom:14px"></p>
+      <div class="fg"><label class="fl">Catatan (opsional)</label><textarea class="fc" id="mActNote" style="min-height:80px" placeholder="Tambahkan catatan..."></textarea></div>
+    </div>
+    <div class="mf"><button class="btn btn-ghost" onclick="closeModal('mAction')">Batal</button><button class="btn" id="mActBtn" onclick="confirmAction()">Konfirmasi</button></div>
+  </div>
+</div>
+
+<!-- MODAL: ADD USER -->
+<div class="ov" id="mAddUser">
+  <div class="modal" style="max-width:440px">
+    <div class="mh"><div class="mh-t">Tambah User Baru</div><button class="mc-btn" onclick="closeModal('mAddUser')">✕</button></div>
+    <div class="mb">
+      <div class="fg"><label class="fl">Nama Lengkap</label><input class="fc" id="nuName" placeholder="Nama lengkap"></div>
+      <div class="fg"><label class="fl">Email</label><input type="email" class="fc" id="nuEmail" placeholder="email@co.com"></div>
+      <div class="form-row">
+        <div class="fg"><label class="fl">Departemen</label><select class="fc" id="nuDept"><option>HRD</option><option>IT</option><option>Finance</option><option>Marketing</option><option>Ops</option></select></div>
+        <div class="fg"><label class="fl">Role</label><select class="fc" id="nuRole"><option>Karyawan</option><option>Atasan</option><option>Admin</option></select></div>
+      </div>
+    </div>
+    <div class="mf"><button class="btn btn-ghost" onclick="closeModal('mAddUser')">Batal</button><button class="btn btn-primary" onclick="addUser()">Simpan</button></div>
+  </div>
+</div>
+
+<div id="toast"></div>
+
+<script src="js/script.js"></script>
+</body>
+</html>
