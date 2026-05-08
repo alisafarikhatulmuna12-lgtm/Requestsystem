@@ -43,8 +43,9 @@ const NAV = {
     {id:'dashboard',   ic:'🏠',label:'Dashboard'},
     {id:'ajukan',      ic:'📝',label:'Ajukan Request'},
     {id:'list-request',ic:'📋',label:'List Request'},
-    {id:'absensi',     ic:'📍',label:'Absensi'},
-    {id:'riwayat',     ic:'📜',label:'Riwayat'},
+    {id:'input-absensi', ic:'📍',label:'Input Absen'},    // ← BARU: Input absen
+    {id:'riwayat',     ic:'📊',label:'Lihat Riwayat '},     // ← Ganti: Lihat riwayat
+    {id:'riwayat',     ic:'📜',label:'Riwayat Request'},
     {id:'kpi-riwayat', ic:'📈',label:'Hasil KPI Saya'},
     {id:'notifikasi',  ic:'🔔',label:'Notifikasi',badge:2},
     {id:'pengaturan',  ic:'⚙️',label:'Pengaturan'},
@@ -52,7 +53,7 @@ const NAV = {
   atasan:[
     {id:'dashboard',    ic:'🏠',label:'Dashboard'},
     {id:'request-masuk',ic:'📥',label:'Request Masuk',badge:3},
-    {id:'absensi',      ic:'📍',label:'Absensi Karyawan'},
+    {id:'absensi',      ic:'📍',label:'Absensi Karyawan'},   // Atasan tetap lihat laporan
     {id:'kpi',          ic:'📊',label:'Penilaian KPI'},
     {id:'kpi-riwayat',  ic:'📈',label:'Riwayat KPI'},
     {id:'list-request', ic:'📋',label:'List Request'},
@@ -64,6 +65,7 @@ const NAV = {
     {id:'dashboard',    ic:'🏠',label:'Dashboard'},
     {id:'request-masuk',ic:'📥',label:'Semua Request',badge:3},
     {id:'kelola-user',  ic:'👥',label:'Kelola User'},
+    {id:'absensi',      ic:'📍',label:'Laporan Absensi'},    // Admin juga bisa lihat
     {id:'list-request', ic:'📋',label:'List Request'},
     {id:'notifikasi',   ic:'🔔',label:'Notifikasi'},
     {id:'pengaturan',   ic:'⚙️',label:'Pengaturan'},
