@@ -136,6 +136,66 @@
         </div>
       </div>
     </div>
+     <!-- LIST REQUEST (general) -->
+    <div class="page" id="p-list-request">
+      <div class="sh">
+        <div><div class="sh-t">List Request</div><div class="sh-s" id="lrSub">Semua request Anda.</div></div>
+        <button class="btn btn-primary" id="btnBaru" onclick="nav('ajukan')">+ Ajukan Baru</button>
+      </div>
+      <div class="fr">
+        <select id="lrStatus" onchange="renderLR()"><option value="">Semua Status</option><option>Pending</option><option>Disetujui</option><option>Ditolak</option></select>
+        <select id="lrJenis" onchange="renderLR()"><option value="">Semua Jenis</option><option>Izin Kerja</option><option>Lembur</option><option>Permintaan Alat Kerja</option><option>Reimbursement</option><option>Cuti Tahunan</option></select>
+        <div class="srch"><input type="text" id="lrSearch" placeholder="Cari request..." oninput="renderLR()"></div>
+      </div>
+      <div class="tabs" id="lrTabs"></div>
+      <div class="card">
+        <div class="card-body" style="padding:0">
+          <table>
+            <thead><tr id="lrHead"></tr></thead>
+            <tbody id="lrTb"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    <!-- MODAL: DETAIL -->
+<div class="ov" id="mDetail">
+  <div class="modal">
+    <div class="mh"><div class="mh-t">Detail Request</div><button class="mc-btn" onclick="closeModal('mDetail')">✕</button></div>
+    <div class="mb" id="mDetailBody"></div>
+    <div class="mf" id="mDetailFoot"></div>
+  </div>
+</div>
+
+<!-- MODAL: ACTION -->
+<div class="ov" id="mAction">
+  <div class="modal" style="max-width:420px">
+    <div class="mh"><div class="mh-t" id="mActTitle">Setujui Request</div><button class="mc-btn" onclick="closeModal('mAction')">✕</button></div>
+    <div class="mb">
+      <p id="mActDesc" style="font-size:12.5px;color:#6b7280;margin-bottom:14px"></p>
+      <div class="fg"><label class="fl">Catatan (opsional)</label><textarea class="fc" id="mActNote" style="min-height:80px" placeholder="Tambahkan catatan..."></textarea></div>
+    </div>
+    <div class="mf"><button class="btn btn-ghost" onclick="closeModal('mAction')">Batal</button><button class="btn" id="mActBtn" onclick="confirmAction()">Konfirmasi</button></div>
+  </div>
+</div>
+
+<!-- MODAL: ADD USER -->
+<div class="ov" id="mAddUser">
+  <div class="modal" style="max-width:440px">
+    <div class="mh"><div class="mh-t">Tambah User Baru</div><button class="mc-btn" onclick="closeModal('mAddUser')">✕</button></div>
+    <div class="mb">
+      <div class="fg"><label class="fl">Nama Lengkap</label><input class="fc" id="nuName" placeholder="Nama lengkap"></div>
+      <div class="fg"><label class="fl">Email</label><input type="email" class="fc" id="nuEmail" placeholder="email@co.com"></div>
+      <div class="form-row">
+        <div class="fg"><label class="fl">Departemen</label><select class="fc" id="nuDept"><option>HRD</option><option>IT</option><option>Finance</option><option>Marketing</option><option>Ops</option></select></div>
+        <div class="fg"><label class="fl">Role</label><select class="fc" id="nuRole"><option>Karyawan</option><option>Atasan</option><option>Admin</option></select></div>
+      </div>
+    </div>
+    <div class="mf"><button class="btn btn-ghost" onclick="closeModal('mAddUser')">Batal</button><button class="btn btn-primary" onclick="addUser()">Simpan</button></div>
+  </div>
+</div>
+
+<div id="toast"></div>
+
 
     <!-- 4. DETAIL & APPROVAL -->
     <div class="page" id="p-detail">
@@ -322,72 +382,9 @@
       </div>
     </div>
 
-    <!-- LIST REQUEST (general) -->
-    <div class="page" id="p-list-request">
-      <div class="sh">
-        <div><div class="sh-t">List Request</div><div class="sh-s" id="lrSub">Semua request Anda.</div></div>
-        <button class="btn btn-primary" id="btnBaru" onclick="nav('ajukan')">+ Ajukan Baru</button>
-      </div>
-      <div class="fr">
-        <select id="lrStatus" onchange="renderLR()"><option value="">Semua Status</option><option>Pending</option><option>Disetujui</option><option>Ditolak</option></select>
-        <select id="lrJenis" onchange="renderLR()"><option value="">Semua Jenis</option><option>Izin Kerja</option><option>Lembur</option><option>Permintaan Alat Kerja</option><option>Reimbursement</option><option>Cuti Tahunan</option></select>
-        <div class="srch"><input type="text" id="lrSearch" placeholder="Cari request..." oninput="renderLR()"></div>
-      </div>
-      <div class="tabs" id="lrTabs"></div>
-      <div class="card">
-        <div class="card-body" style="padding:0">
-          <table>
-            <thead><tr id="lrHead"></tr></thead>
-            <tbody id="lrTb"></tbody>
-          </table>
-        </div>
-      </div>
-    </div>
-
-  </div><!-- /content -->
+     </div><!-- /content -->
 </div><!-- /main -->
-
 </div><!-- /wrap -->
-
-<!-- MODAL: DETAIL -->
-<div class="ov" id="mDetail">
-  <div class="modal">
-    <div class="mh"><div class="mh-t">Detail Request</div><button class="mc-btn" onclick="closeModal('mDetail')">✕</button></div>
-    <div class="mb" id="mDetailBody"></div>
-    <div class="mf" id="mDetailFoot"></div>
-  </div>
-</div>
-
-<!-- MODAL: ACTION -->
-<div class="ov" id="mAction">
-  <div class="modal" style="max-width:420px">
-    <div class="mh"><div class="mh-t" id="mActTitle">Setujui Request</div><button class="mc-btn" onclick="closeModal('mAction')">✕</button></div>
-    <div class="mb">
-      <p id="mActDesc" style="font-size:12.5px;color:#6b7280;margin-bottom:14px"></p>
-      <div class="fg"><label class="fl">Catatan (opsional)</label><textarea class="fc" id="mActNote" style="min-height:80px" placeholder="Tambahkan catatan..."></textarea></div>
-    </div>
-    <div class="mf"><button class="btn btn-ghost" onclick="closeModal('mAction')">Batal</button><button class="btn" id="mActBtn" onclick="confirmAction()">Konfirmasi</button></div>
-  </div>
-</div>
-
-<!-- MODAL: ADD USER -->
-<div class="ov" id="mAddUser">
-  <div class="modal" style="max-width:440px">
-    <div class="mh"><div class="mh-t">Tambah User Baru</div><button class="mc-btn" onclick="closeModal('mAddUser')">✕</button></div>
-    <div class="mb">
-      <div class="fg"><label class="fl">Nama Lengkap</label><input class="fc" id="nuName" placeholder="Nama lengkap"></div>
-      <div class="fg"><label class="fl">Email</label><input type="email" class="fc" id="nuEmail" placeholder="email@co.com"></div>
-      <div class="form-row">
-        <div class="fg"><label class="fl">Departemen</label><select class="fc" id="nuDept"><option>HRD</option><option>IT</option><option>Finance</option><option>Marketing</option><option>Ops</option></select></div>
-        <div class="fg"><label class="fl">Role</label><select class="fc" id="nuRole"><option>Karyawan</option><option>Atasan</option><option>Admin</option></select></div>
-      </div>
-    </div>
-    <div class="mf"><button class="btn btn-ghost" onclick="closeModal('mAddUser')">Batal</button><button class="btn btn-primary" onclick="addUser()">Simpan</button></div>
-  </div>
-</div>
-
-<div id="toast"></div>
-
 <script src="js/script.js"></script>
 </body>
 </html>

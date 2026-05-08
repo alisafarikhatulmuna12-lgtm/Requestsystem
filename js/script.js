@@ -44,6 +44,7 @@ const NAV = {
     {id:'ajukan',      ic:'📝',label:'Ajukan Request'},
     {id:'list-request',ic:'📋',label:'List Request'},
     {id:'absensi',     ic:'📍',label:'Absensi'},
+    {id:'absensi', label:'Absensi', ic:'📅'},
     {id:'riwayat',     ic:'📜',label:'Riwayat'},
     {id:'kpi-riwayat', ic:'📈',label:'Hasil KPI Saya'},
     {id:'notifikasi',  ic:'🔔',label:'Notifikasi',badge:2},
@@ -995,4 +996,6 @@ function init(){
     
     console.log('App initialized for:', session);
 }
+init();
+
 init();
