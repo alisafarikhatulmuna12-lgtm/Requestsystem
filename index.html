@@ -331,6 +331,232 @@
       </div>
     </div>
 
+    <!-- 10. INPUT ABSENSI (KARYAWAN ONLY) -->
+    <div class="page" id="p-input-absensi">
+      <div class="sh">
+        <div>
+          <div class="sh-t">Input Absensi Harian</div>
+          <div class="sh-s">Catat kehadiran Anda untuk hari ini.</div>
+        </div>
+      </div>
+
+      <!-- Status Card -->
+      <div class="card" style="margin-bottom:20px; background: linear-gradient(135deg, #1a2744 0%, #1e3a6e 100%); color: #fff;">
+        <div class="card-body" style="padding: 24px;">
+          <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px;">
+            <div>
+              <div style="font-size: 13px; opacity: 0.7; margin-bottom: 4px;">Status Hari Ini</div>
+              <div id="absTodayStatus" style="font-size: 28px; font-weight: 800;">Belum Absen</div>
+              <div id="absTodayDate" style="font-size: 12px; opacity: 0.6; margin-top: 4px;">-</div>
+            </div>
+            <div style="text-align: right;">
+              <div style="font-size: 13px; opacity: 0.7; margin-bottom: 4px;">Jam Sekarang</div>
+              <div id="absCurrentTime" style="font-size: 36px; font-weight: 800; font-family: monospace;">--:--</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="card" style="margin-bottom:20px;">
+        <div class="card-body" style="padding: 24px;">
+          <div id="absActionArea">
+            <!-- Dynamic content: Check-in / Check-out / Sudah Pulang -->
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick Form (if needed) -->
+      <div class="card" style="margin-bottom:20px;">
+        <div class="card-head"><div class="card-t">Form Keterangan (Opsional)</div></div>
+        <div class="card-body">
+          <div class="fg">
+            <label class="fl">Status Kehadiran</label>
+            <select class="fc" id="absInputStatus">
+              <option value="Hadir">Hadir</option>
+              <option value="Terlambat">Terlambat</option>
+              <option value="Izin">Izin</option>
+              <option value="Sakit">Sakit</option>
+              <option value="Alpha">Alpha (Tidak Masuk)</option>
+            </select>
+          </div>
+          <div class="fg">
+            <label class="fl">Lokasi</label>
+            <select class="fc" id="absInputLokasi">
+              <option value="Kantor Pusat">Kantor Pusat</option>
+              <option value="Kantor Cabang">Kantor Cabang</option>
+              <option value="Remote/WFH">Remote / WFH</option>
+              <option value="Dinas Luar">Dinas Luar</option>
+            </select>
+          </div>
+          <div class="fg">
+            <label class="fl">Keterangan</label>
+            <textarea class="fc" id="absInputKeterangan" placeholder="Contoh: Macet di tol, izin keluarga, dll..." style="min-height: 60px;"></textarea>
+          </div>
+        </div>
+      </div>
+
+      <!-- My Attendance Summary -->
+      <div class="card">
+        <div class="card-head">
+          <div class="card-t">Ringkasan Absensi Saya - Mei 2026</div>
+        </div>
+        <div class="card-body" style="padding:0">
+          <table>
+            <thead>
+              <tr>
+                <th>Tanggal</th>
+                <th>Jam Masuk</th>
+                <th>Jam Keluar</th>
+                <th>Status</th>
+                <th>Lokasi</th>
+              </tr>
+            </thead>
+            <tbody id="absMyHistory"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- 11. ABSENSI (LAPORAN - ATASAN & ADMIN) -->
+    <div class="page" id="p-absensi">
+      <div class="sh">
+        <div>
+          <div class="sh-t" id="absTitle">Absensi Karyawan</div>
+          <div class="sh-s">Monitoring kehadiran dan aktivitas karyawan.</div>
+        </div>
+      </div>
+      
+      <!-- Stat Cards -->
+      <div class="abs-stat-row">
+        <div class="abs-stat-card abs-card-hadir">
+          <div class="abs-stat-icon">✅</div>
+          <div class="abs-stat-info">
+            <div class="abs-stat-value" id="absTotalHadir">0</div>
+            <div class="abs-stat-label">Hadir</div>
+          </div>
+        </div>
+        <div class="abs-stat-card abs-card-telat">
+          <div class="abs-stat-icon">⏰</div>
+          <div class="abs-stat-info">
+            <div class="abs-stat-value" id="absTotalTerlambat">0</div>
+            <div class="abs-stat-label">Terlambat</div>
+          </div>
+        </div>
+        <div class="abs-stat-card abs-card-izin">
+          <div class="abs-stat-icon">📋</div>
+          <div class="abs-stat-info">
+            <div class="abs-stat-value" id="absTotalIzin">0</div>
+            <div class="abs-stat-label">Izin/Sakit</div>
+          </div>
+        </div>
+        <div class="abs-stat-card abs-card-alpha">
+          <div class="abs-stat-icon">❌</div>
+          <div class="abs-stat-info">
+            <div class="abs-stat-value" id="absTotalAlpha">0</div>
+            <div class="abs-stat-label">Alpha</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Weekly Chart -->
+      <div class="card" style="margin-bottom:20px">
+        <div class="card-head">
+          <div class="card-t">Grafik Kehadiran Mingguan</div>
+        </div>
+        <div class="card-body">
+          <div class="abs-chart-wrapper" id="absChart"></div>
+          <div class="abs-legend">
+            <div class="abs-legend-item"><span class="abs-legend-dot" style="background:#10b981"></span> Hadir</div>
+            <div class="abs-legend-item"><span class="abs-legend-dot" style="background:#f59e0b"></span> Terlambat</div>
+            <div class="abs-legend-item"><span class="abs-legend-dot" style="background:#ef4444"></span> Tidak Hadir</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Filters -->
+      <div class="fr">
+        <input type="date" id="absDate" value="2026-05-06" onchange="renderAbsensi()">
+        <select id="absDept" onchange="renderAbsensi()">
+          <option value="">Semua Dept</option>
+          <option>HRD</option>
+          <option>IT</option>
+          <option>Finance</option>
+          <option>Marketing</option>
+          <option>Ops</option>
+        </select>
+        <select id="absStatus" onchange="renderAbsensi()">
+          <option value="">Semua Status</option>
+          <option>Hadir</option>
+          <option>Terlambat</option>
+          <option>Izin</option>
+          <option>Sakit</option>
+          <option>Alpha</option>
+        </select>
+        <div class="srch"><input type="text" id="absSearch" placeholder="Cari nama karyawan..." oninput="renderAbsensi()"></div>
+      </div>
+
+      <!-- Table -->
+      <div class="card">
+        <div class="card-body" style="padding:0">
+          <table>
+            <thead>
+              <tr>
+                <th>No</th>
+                <th>Nama</th>
+                <th>Dept</th>
+                <th>Jam Masuk</th>
+                <th>Jam Keluar</th>
+                <th>Status</th>
+                <th>Lokasi</th>
+                <th>Keterangan</th>
+                <th>Aksi</th>
+              </tr>
+            </thead>
+            <tbody id="absTb"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- 12. DETAIL ABSENSI -->
+    <div class="page" id="p-absensi-detail">
+      <div class="sh">
+        <div>
+          <div class="sh-t">Detail Absensi Karyawan</div>
+        </div>
+        <button class="btn btn-ghost btn-sm" onclick="goBack()">← Kembali</button>
+      </div>
+      <div class="detail-grid">
+        <div class="card">
+          <div class="card-head"><div class="card-t">Informasi Karyawan</div></div>
+          <div class="card-body" id="absDetailInfo"></div>
+        </div>
+        <div class="card">
+          <div class="card-head"><div class="card-t">Ringkasan Kehadiran</div></div>
+          <div class="card-body" id="absDetailSummary"></div>
+        </div>
+      </div>
+      <div class="card" style="margin-top:16px">
+        <div class="card-head"><div class="card-t">Riwayat Absensi</div></div>
+        <div class="card-body" style="padding:0">
+          <table>
+            <thead>
+              <tr>
+                <th>Tanggal</th>
+                <th>Jam Masuk</th>
+                <th>Jam Keluar</th>
+                <th>Status</th>
+                <th>Lokasi</th>
+                <th>Keterangan</th>
+              </tr>
+            </thead>
+            <tbody id="absDetailTb"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
     <!-- NOTIFIKASI -->
     <div class="page" id="p-notifikasi">
       <div class="sh">
@@ -387,3 +613,4 @@
 <script src="js/script.js"></script>
 </body>
 </html>
+  
